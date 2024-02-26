@@ -57,14 +57,6 @@ function drawFood() {
   }
 }
 
-// Generate food
-function generateFood() {
-  const x = Math.floor(Math.random() * gridSize) + 1;
-  const y = Math.floor(Math.random() * gridSize) + 1;
-  return { x, y };
-}
-
-// Moving the snake
 function move() {
   const head = { ...snake[0] };
   switch (direction) {
@@ -84,19 +76,42 @@ function move() {
 
   snake.unshift(head);
 
-  //   snake.pop();
-
+  // Check if the snake's head reaches the food
   if (head.x === food.x && head.y === food.y) {
-    food = generateFood();
+    generateAndAskQuestion();
     increaseSpeed();
-    clearInterval(gameInterval); // Clear past interval
-    gameInterval = setInterval(() => {
-      move();
-      checkCollision();
-      draw();
-    }, gameSpeedDelay);
   } else {
     snake.pop();
+  }  
+
+  checkCollision();
+  draw();
+}
+
+function generateFood() {
+  const x = Math.floor(Math.random() * gridSize) + 1;
+  const y = Math.floor(Math.random() * gridSize) + 1;
+
+  // Return food position without asking question
+  return { x, y };
+}
+
+function generateAndAskQuestion() {
+  // Generate random numbers for the math question
+  const num1 = Math.floor(Math.random() * 10) + 1;
+  const num2 = Math.floor(Math.random() * 10) + 1;
+  const answer = num1 + num2;
+
+  // Ask the question to the player
+  const userAnswer = prompt(`What is ${num1} + ${num2}?`);
+
+  // Check if the answer is correct
+  if (parseInt(userAnswer) === answer) {
+    alert('Correct!');
+    food = generateFood(); // Generate new food position
+  } else {
+    alert(`Incorrect! The correct answer is ${answer}. Game Over!`);
+    resetGame();
   }
 }
 
