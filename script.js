@@ -97,13 +97,45 @@ function generateFood() {
 }
 
 function generateAndAskQuestion() {
+  // Generate random arithmetic operation (0: addition, 1: subtraction, 2: multiplication, 3: division)
+  const operationIndex = Math.floor(Math.random() * 4);
+  let num1, num2, answer, question;
+
   // Generate random numbers for the math question
-  const num1 = Math.floor(Math.random() * 10) + 1;
-  const num2 = Math.floor(Math.random() * 10) + 1;
-  const answer = num1 + num2;
+  switch (operationIndex) {
+    case 0: // Addition
+      num1 = Math.floor(Math.random() * 10) + 1;
+      num2 = Math.floor(Math.random() * 10) + 1;
+      answer = num1 + num2;
+      question = `${num1} + ${num2}`;
+      break;
+    case 1: // Subtraction
+      num1 = Math.floor(Math.random() * 10) + 1;
+      num2 = Math.floor(Math.random() * 10) + 1;
+      // Ensure num1 is greater than or equal to num2 for positive result
+      if (num1 < num2) {
+        [num1, num2] = [num2, num1];
+      }
+      answer = num1 - num2;
+      question = `${num1} - ${num2}`;
+      break;
+    case 2: // Multiplication
+      num1 = Math.floor(Math.random() * 5) + 1;
+      num2 = Math.floor(Math.random() * 5) + 1;
+      answer = num1 * num2;
+      question = `${num1} * ${num2}`;
+      break;
+    case 3: // Division
+      // Generate divisor and dividend such that the result is an integer
+      num2 = Math.floor(Math.random() * 5) + 1;
+      answer = Math.floor(Math.random() * 5) + 1;
+      num1 = num2 * answer;
+      question = `${num1} / ${num2}`;
+      break;
+  }
 
   // Ask the question to the player
-  const userAnswer = prompt(`What is ${num1} + ${num2}?`);
+  const userAnswer = prompt(`What is ${question}?`);
 
   // Check if the answer is correct
   if (parseInt(userAnswer) === answer) {
@@ -114,12 +146,6 @@ function generateAndAskQuestion() {
     resetGame();
   }
 }
-
-// Test moving
-// setInterval(() => {
-//   move(); // Move first
-//   draw(); // Then draw again new position
-// }, 200);
 
 // Start game function
 function startGame() {
